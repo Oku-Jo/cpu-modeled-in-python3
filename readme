@@ -1,0 +1,17 @@
+After completing the CodeCademy computer architecture course we have been tasked with using python to simulate the basic functions of a CPU.
+
+This project is relatively open ended, and CodeCademy has provided some basic mips32 instructions and a few lines of data to test our constructs with.
+
+I went into this knowing that I was going to struggle, so the goal I set for myself was to create a basic cpu that could handle a variety of randomly generated mips32 instructions (which adhere to the standard rules of mips32 instruction formatting) as well as an array of randomly generated data instead of/as well as the provided instructions and data. I chose to do this so that I could be sure the model I was building was actually working, not just working with the provided data. I figured if I could build a simulated cpu that functions with externally-sourced instructions and data it would mean that I had gained a firm understanding of the material, both python3 and basic cpu architecture. The goal, after all, is to learn and to gain confidence that I have a good handle on what I'm learning.
+
+    - I have finished the cpu and it is currently handling instructions well, but my model was getting stuck in a loop with the full list of randomly generated instructions. I thought the source of my problem was somewhere in the structure of my model and spent far too long combing through everything only to realize that it might be the instructions causing the looping.
+    - I have since gone through the instructions and curated them to create a cohesive set that handles branching and jumping without causing a loop due to the program counter being reset to the same spot with no chance of diverging from the looping path.
+
+The second aspect of this project that I wanted to spend a bit of extra time on was the structuring of the memory, the cache, and the cpu register. I wanted to make the transferring of data between register<->cache<->memory as reliable as possible before trying to do anything fancy with cache associativity, flagging cache blocks as dirty to increase efficiency/reduce frequency of memory writes, and anything more complex than a first-in-first-out cache replacement policy. My goal for the register<->cache<->memory is a functioning cpu register that works 1:1 with the many mips32 instructions (eventually all, but for now I am trying to keep it simple), a *reliable* fully associative cache with a FIFO policy (that can be updated in a future re-work), and a main memory structure that is quick to access using indices as addresses.
+
+I built a Register class that I ended up taking apart and incorporating into the CPU class as it was getting very long winded to write out the decode_and_execute method, plus it was becoming more and more convoluted and less readable. Overall I think this was the right choice.
+
+Shortcomings that I am aware of:
+-None of the register/cache/memory have limits on bits per address/location. This can be updated in the future, but for now I have done what I set out to accomplish.
+-None of this system uses binary or hex. In the future I can update this alongside adding limits to bits per location as well as how to handle results from the ALU being larger than bits-per-location allows, ie splitting and storing data as bytes vs half words vs words. This also includes updating how the Store Word mips32 instruction would handle the offset (+4/+8/+16 instead of +1 as it is currently).
+-Don't have all mips32 instructions built in, but enough to handle arithmetic, jumping, and branching
